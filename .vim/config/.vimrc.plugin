@@ -9,12 +9,10 @@ let g:my.ft = {
 set nocompatible
 
 if has('vim_starting')
-  set runtimepath+=~/projects/dotfiles/.vim/bundle/neobundle.vim/
+  set runtimepath+=~/projects/dotfiles/.vim/neobundle.vim/
 endif
 
 call neobundle#begin(expand('~/projects/dotfiles/.vim/bundle/'))
-
-NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Color scheme
 NeoBundle 'chriskempson/base16-vim'
