@@ -1,0 +1,13 @@
+# ~/.tmuxinator/something.yml
+
+name: something
+root: ~/projects/
+
+windows:
+  - front:
+      layout: 73cf,318x57,0,0{60x57,0,0,0,195x57,61,0,6,61x57,257,0,7}
+      panes:
+        -
+        - vim
+        -
+  - shell:

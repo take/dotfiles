@@ -1,0 +1,22 @@
+[user]
+	name = Takehiro Adachi
+	email = takehiro0740@gmail.com
+[color]
+	ui = 1
+[rebase]
+	autosquash = true
+[help]
+	autocorrect = 1
+[rerere]
+	enabled = 1
+[push]
+	default = current
+[alias]
+    co = checkout
+    u  = "!sh -c 'git ft; git rsm; git delete-merged-branches'"
+    delete-merged-branches = !"git branch --merged master | grep -v master | grep -v '*' | xargs git branch -d"
+[credential]
+	helper = osxkeychain
+[core]
+	autocrlf = false
+	excludesfile = /Users/takehiro/.gitignore_global

@@ -1,0 +1,19 @@
+set number
+
+set cursorline
+
+set showmatch
+
+" even if the current file is not saved, show another file
+set hidden
+
+set ruler
+
+set showcmd
+
+set norestorescreen=off
+
+set textwidth=79 " wrap at 79 chars by default
+if v:version >= 703
+  set colorcolumn=+1
+endif

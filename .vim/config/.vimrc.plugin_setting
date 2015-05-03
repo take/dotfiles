@@ -1,0 +1,377 @@
+function! NeoBundleGet(name)
+  if !exists('s:dummy')
+    let s:dummy = { 'hooks' : {} }
+    function! s:dummy.hooks.on_source(_)
+    endfunction
+  endif
+
+  let bundle = neobundle#get(a:name)
+  return empty(bundle) ? s:dummy : bundle
+endfunction
+
+function! s:rbenv_executable(name)
+  return system('rbenv which ' . a:name) !~ 'command not found'
+endfunction
+
+
+
+"-----------
+" NeoBundle
+"-----------
+let g:neobundle#log_filename = '~/Dropbox/Projects/dotfiles/.vim/tmp/neobundle.log'
+
+
+
+"-------
+" CtrlP
+"-------
+nmap <c-p> :CtrlP<cr>
+
+
+
+"-------
+" Unite
+"-------
+" Yank history
+nmap <leader>y :Unite history/yank<cr>
+" File searching like ctrlp.vim
+" nmap <c-p> :Unite -start-insert file_rec/async:!<cr>
+" Content searching like ack/ag.vim
+nmap <leader>f :Unite grep:. -no-quit<cr>
+" Buffer switching
+nmap <leader>b :Unite buffer<cr>
+
+let bundle = NeoBundleGet('unite.vim')
+function! bundle.hooks.on_source(bundle)
+  " call unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\|.idea\|.vimsessions\)$')
+  let g:unite_source_history_yank_enable = 1
+
+  " Use ag in unite grep source
+  if executable('ag')
+    let g:unite_source_grep_command       = 'ag'
+    let g:unite_source_grep_default_opts  = '--nocolor --nogroup --hidden'
+          \ . " --ignore='*.vimsessions*'"
+          \ . " --ignore='*.idea*'"
+          \ . " --ignore='.zeus.sock'"
+          \ . " --ignore='*.log'"
+    let g:unite_source_grep_recursive_opt = ''
+  endif
+  let g:unite_source_buffer_time_format = ''
+
+  autocmd FileType unite call s:unite_my_settings()
+  function! s:unite_my_settings()
+    nmap <buffer><expr><c-a>  unite#do_action('above')
+    imap <buffer><expr><c-a>  unite#do_action('above')
+    nmap <buffer><expr><c-r>  unite#do_action('right')
+    imap <buffer><expr><c-r>  unite#do_action('right')
+    nmap <buffer><expr><c-l>  unite#do_action('left')
+    imap <buffer><expr><c-l>  unite#do_action('left')
+    nmap <buffer><expr><c-d>  unite#do_action('delete')
+    imap <buffer><expr><c-d>  unite#do_action('delete')
+  endfunction
+endfunction
+
+
+
+"----------------
+" vim-unite-giti
+"----------------
+nmap <silent><leader>ga :Unite giti/branch_all<cr>
+nmap <silent><leader>gl :Unite giti/log<cr>
+
+
+
+"---------------
+" unite-outline
+"---------------
+nmap <leader>l :Unite outline<cr>
+
+
+
+"------------
+" unite-mark
+"------------
+nmap <leader>m<cr> :Unite mark<cr>
+
+
+
+"---------------
+" unite-history
+"---------------
+nmap <silent><leader>hc :Unite history/command<cr>
+nmap <silent><leader>hs :Unite history/search<cr>
+
+
+
+"------------
+" unite-help
+"------------
+nmap <silent><leader>cwh :UniteWithCursorWord help<cr>
+
+
+
+"----------
+" Vimfiler
+"----------
+" Disable netrw
+let g:loaded_netrwPlugin = 1
+
+" Open new window to the right
+set splitright
+
+nmap <silent><c-f><c-f> :VimFilerBufferDir -find<cr>
+nmap <silent><c-f><c-e> :VimFilerExplorer<cr>
+nmap <silent><c-f><c-h><c-e> :VimFilerExplorer -find<cr>
+
+let bundle = NeoBundleGet('vimfiler.vim')
+function! bundle.hooks.on_source(bundle)
+  let g:vimfiler_as_default_explorer   = 1
+  let g:vimfiler_safe_mode_by_default  = 0
+  let g:vimfiler_ignore_pattern = '^\%(.git\|.DS_Store\|.idea\|.vimsessions\|.bundle\)$'
+endfunction
+
+" https://github.com/Shougo/vimfiler.vim/issues/102
+function! s:vimfiler_width_expr()
+  let w = vimfiler#get_context().winwidth
+  return w == winwidth(0) ? w * 2 : w
+endfunction
+autocmd FileType vimfiler
+  \ nmap <buffer> <SID>(vimfiler_redraw_screen) <plug>(vimfiler_redraw_screen)|
+  \ nmap <buffer><script><expr> <c-e>
+  \   <SID>vimfiler_width_expr() . "\<c-w>\|\<SID>(vimfiler_redraw_screen)"
+
+"-----------
+" unite-tag
+"-----------
+nmap <c-]> :<c-u>UniteWithCursorWord -immediately tag<cr>
+
+
+
+"-------------
+" alpaca_tags
+"-------------
+let g:alpaca_update_tags_config = {
+      \ '_'       : '-R --sort=yes --languages=-js,JavaScript',
+      \ 'js'      : '--languages=+js',
+      \ '-js'     : '--languages=-js,JavaScript',
+      \ 'vim'     : '--languages=+Vim,vim',
+      \ '-vim'    : '--languages=-Vim,vim',
+      \ '-style'  : '--languages=-css,sass,scss,js,JavaScript,html',
+      \ 'scss'    : '--languages=+scss --languages=-css,sass',
+      \ 'sass'    : '--languages=+sass --languages=-css,scss',
+      \ 'css'     : '--languages=+css',
+      \ 'java'    : '--languages=+java $JAVA_HOME/src',
+      \ 'ruby'    : '--languages=+Ruby',
+      \ 'coffee'  : '--languages=+coffee',
+      \ '-coffee' : '--languages=-coffee',
+      \ 'bundle'  : '--languages=+Ruby --languages=-css,sass,scss,js,JavaScript,coffee',
+    \ }
+
+" aug AlpacaUpdateTags
+"   au!
+"   au FileWritePost,BufWritePost * AlpacaTagsUpdate -style
+"   au FileWritePost,BufWritePost Gemfile AlpacaTagsUpdateBundle
+"   au FileReadPost,BufEnter * AlpacaTagsSet
+" aug END
+
+
+
+" "-----------
+" " powerline
+" "-----------
+" " Enable to show powerline even if only one file is open
+" set laststatus=2
+
+
+
+"---------
+" airline
+"---------
+set laststatus=2
+let g:airline_theme     = 'base16'
+let g:airline_left_sep  = ''
+let g:airline_right_sep = ''
+
+
+
+"-------------
+" Neocomplete
+"-------------
+" Disable AutoComplPop
+let g:acp_enableAtStartup = 0
+
+let bundle = NeoBundleGet('neocomplete.vim')
+function! bundle.hooks.on_source(bundle)
+  " Use neocomplete
+  let g:neocomplete#enable_at_startup            = 1
+  let g:neocomplete#auto_completion_start_length = 3
+  let g:neocomplete#force_overwrite_completefunc = 1
+endfunction
+
+
+
+"------------
+" Neosnippet
+"------------
+imap <c-f> <plug>(neosnippet_expand_or_jump)
+nmap <space>e <c-u>:NeoSnippetEdit<cr>
+au BufRead,BufNewFile *.snip  set filetype=snippet
+
+let bundle = NeoBundleGet('neosnippet')
+function! bundle.hooks.on_source(bundle)
+  let g:neosnippet#snippets_directory=expand('~/Dropbox/Projects/dotfiles/.vim/snippet')
+endfunction
+
+
+" "----------------------
+" " Neocomplcache-rsense
+" "----------------------
+" let g:rsenseUseOmniFunc = 1
+" let g:neocomplcache#sources#rsense#home_directory = neobundle#get_neobundle_dir() . 'rsense-0.3'
+
+
+
+"------------
+" indentLine
+"------------
+nmap <silent><leader>ig :IndentLinesToggle<cr>
+
+
+
+"--------------
+" open-browser
+"--------------
+let g:netrw_nogx = 1
+nmap gx <plug>(openbrowser-smart-search)
+vmap gx <plug>(openbrowser-smart-search)
+
+
+
+"---------------------
+" open-browser-github
+"---------------------
+nmap <silent><c-g><c-h> :OpenGithubFile<cr>
+
+let bundle = NeoBundleGet('open-browser-github.vim')
+function! bundle.hooks.on_source(bundle)
+  let g:openbrowser_github_always_used_branch = 'master'
+endfunction
+
+
+
+"-----------
+" Syntastic
+"-----------
+" Show list in quickfix
+let g:syntastic_auto_loc_list = 1
+" let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+" Skip when :wq, :x, :ZZ
+let g:syntastic_check_on_wq    = 0
+let g:syntastic_error_symbol   = '✗'
+let g:syntastic_warning_symbol = '⚠'
+" Show warning too
+let g:syntastic_quiet_messages = { 'level': 'warnings' }
+
+
+"--------
+" Switch
+"--------
+nmap <silent>- :Switch<cr>
+
+
+
+"-----------
+" vim-rspec
+"-----------
+nmap <silent><leader>rc :w \| :call RunCurrentSpecFile()<cr>
+nmap <silent><leader>rn :w \| :call RunNearestSpec()<cr>
+nmap <silent><leader>rl :w \| :call RunLastSpec()<cr>
+nmap <silent><leader>ra :w \| :call RunAllSpecs()<cr>
+
+let bundle = NeoBundleGet('vim-rspec')
+function! bundle.hooks.on_source(bundle)
+  if s:rbenv_executable('spec')
+    let g:rspec_command = 'Dispatch bundle exec spec {spec}'
+  " elseif s:rbenv_executable('rspec') && s:rbenv_executable('zeus')
+  "   let g:rspec_command = 'Dispatch zeus rspec {spec}'
+  elseif s:rbenv_executable('rspec')
+    let g:rspec_command = 'Dispatch rspec {spec}'
+  endif
+endfunction
+
+
+
+"-----------
+" Quickrun
+"-----------
+nmap <silent><leader>r :QuickRun<cr>
+
+
+
+"----------
+" vim-session
+"----------
+let g:session_autosave = 'yes'
+let g:session_directory = '~/Dropbox/Projects/dotfiles/.vim/sessions'
+
+" Check whether the current working directory contains a ".vimsessions"
+" directory. If it does, configure the vim-session plug-in to load
+" its sessions from the ".vimsessions" directory.
+" From: https://github.com/xolox/vim-session/issues/49
+let s:local_session_directory = xolox#misc#path#merge(getcwd(), '.vimsessions')
+if isdirectory(s:local_session_directory)
+  let g:session_directory = s:local_session_directory
+  let g:session_autoload = 'yes'
+  let g:session_autosave_periodic = 1
+else
+  let g:session_autoload = 'no'
+endif
+unlet s:local_session_directory
+
+
+
+"---------------
+" vim-gitgutter
+"---------------
+let g:gitgutter_eager = 0
+
+
+
+"--------------
+" vim-surround
+"--------------
+let g:surround_no_mappings = 1
+
+" Copied from https://github.com/tpope/vim-surround/blob/master/plugin/surround.vim
+" for lazy loading.
+nmap ds  <plug>Dsurround
+nmap cs  <plug>Csurround
+nmap ys  <plug>Ysurround
+nmap yS  <plug>YSurround
+nmap yss <plug>Yssurround
+nmap ySs <plug>YSsurround
+nmap ySS <plug>YSsurround
+xmap S   <plug>VSurround
+xmap gS  <plug>VgSurround
+
+
+
+"----------------
+" vim-easy-align
+"----------------
+vmap <silent><cr> :EasyAlign<cr>
+
+
+
+" "---------------
+" " vim-auto-save
+" "---------------
+" let g:auto_save = 1
+" let g:auto_save_no_updatetime = 1
+
+
+
+"-----------------
+" vim-numbertoggle
+"-----------------
+" let g:NumberToggleTrigger="<leader>n"

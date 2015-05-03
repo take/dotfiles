@@ -1,0 +1,42 @@
+set showtabline=2
+
+nmap <Leader>t [TABCMD]
+
+nnoremap <silent>[TABCMD]f :tabfirst<cr>
+nnoremap <silent>[TABCMD]l :tablast<cr>
+nnoremap <silent>[TABCMD]n :tabnext<cr>
+nnoremap <silent>[TABCMD]N :tabNext<cr>
+nnoremap <silent>[TABCMD]p :tabprevious<cr>
+nnoremap <silent>[TABCMD]e :tablast <bar> tabnew<cr>
+nnoremap <silent>[TABCMD]c :tabclose<cr>
+
+for n in range(1, 9)
+  execute 'nmap <silent> [TABCMD]'.n  ':<c-u>tabnext'.n.'<cr>'
+endfor
+
+
+" Anywhere SID.
+function! s:SID_PREFIX()
+  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeSID_PREFIX$')
+endfunction
+
+" Set tabline.
+function! s:my_tabline()
+  let s = ''
+  for i in range(1, tabpagenr('$'))
+    let bufnrs = tabpagebuflist(i)
+    let bufnr = bufnrs[tabpagewinnr(i) - 1]  " first window, first appears
+    let no = i  " display 0-origin tabpagenr.
+    let mod = getbufvar(bufnr, '&modified') ? '!' : ' '
+    let title = fnamemodify(bufname(bufnr), ':t')
+    let title = '[' . title . ']'
+    let s .= '%'.i.'T'
+    let s .= '%#' . (i == tabpagenr() ? 'TabLineSel' : 'TabLine') . '#'
+    let s .= no . ':' . title
+    let s .= mod
+    let s .= '%#TabLineFill# '
+  endfor
+  let s .= '%#TabLineFill#%T%=%#TabLine#'
+  return s
+endfunction
+let &tabline = '%!'. s:SID_PREFIX() . 'my_tabline()'

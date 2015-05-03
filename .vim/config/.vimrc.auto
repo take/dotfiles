@@ -1,0 +1,35 @@
+" turn off auto indent when pasting from clipboard
+if &term =~ "xterm"
+	let &t_ti .= "\e[?2004h"
+	let &t_te .= "\e[?2004l"
+	let &pastetoggle = "\e[201~"
+
+	function XTermPasteBegin(ret)
+		set paste
+		return a:ret
+	endfunction
+
+	noremap <special> <expr> <Esc>[200~ XTermPasteBegin("0i")
+	inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+	cnoremap <special> <Esc>[200~ <nop>
+	cnoremap <special> <Esc>[201~ <nop>
+endif
+
+
+" auto close tag in HTML,XML
+augroup AutoCloseTag
+  autocmd!
+  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype eruby inoremap <buffer> </ </<C-x><C-o>
+augroup END
+
+
+" turn on command line completion to expand mode
+set wildmenu
+
+" turn off auto comment insertion after enter
+autocmd FileType * set formatoptions-=ro
+
+" Deleting trailing whitespaces
+autocmd BufWritePre * :%s/\s\+$//ge
