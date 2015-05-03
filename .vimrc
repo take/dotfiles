@@ -1,1 +1,1 @@
-source ~/Dropbox/Projects/dotfiles/.vim/config/.vimrc
+source ~/projects/dotfiles/.vim/config/.vimrc

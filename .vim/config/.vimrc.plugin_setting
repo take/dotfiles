@@ -15,13 +15,6 @@ endfunction
 
 
 
-"-----------
-" NeoBundle
-"-----------
-let g:neobundle#log_filename = '~/projects/dotfiles/.vim/tmp/neobundle.log'
-
-
-
 "-------
 " CtrlP
 "-------
