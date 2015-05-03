@@ -19,7 +19,7 @@ setopt auto_cd
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 GOPATH=$HOME/go
-PATH=$HOME/bin:$PATH:$GOPATH/bin
+PATH=$HOME/.rbenv/shims:$HOME/bin:$PATH:$GOPATH/bin
 EDITOR=vim
 export GOPATH
 export PATH
@@ -27,7 +27,7 @@ export EDITOR
 export LANG=ja_JP.UTF-8
 export LESSCHARSET=UTF-8
 
-alias cdd='cd ~/Dropbox/projects/dotfiles'
+alias cdd='cd ~/projects/dotfiles'
 alias vi='vim'
 alias viz='vim ~/.zshrc'
 alias viv='vim ~/.vimrc'
