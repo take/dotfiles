@@ -18,7 +18,7 @@ endfunction
 "-----------
 " NeoBundle
 "-----------
-let g:neobundle#log_filename = '~/Dropbox/Projects/dotfiles/.vim/tmp/neobundle.log'
+let g:neobundle#log_filename = '~/projects/dotfiles/.vim/tmp/neobundle.log'
 
 
 
@@ -219,7 +219,7 @@ au BufRead,BufNewFile *.snip  set filetype=snippet
 
 let bundle = NeoBundleGet('neosnippet')
 function! bundle.hooks.on_source(bundle)
-  let g:neosnippet#snippets_directory=expand('~/Dropbox/Projects/dotfiles/.vim/snippet')
+  let g:neosnippet#snippets_directory=expand('~/projects/dotfiles/.vim/snippet')
 endfunction
 
 
@@ -312,7 +312,7 @@ nmap <silent><leader>r :QuickRun<cr>
 " vim-session
 "----------
 let g:session_autosave = 'yes'
-let g:session_directory = '~/Dropbox/Projects/dotfiles/.vim/sessions'
+let g:session_directory = '~/projects/dotfiles/.vim/sessions'
 
 " Check whether the current working directory contains a ".vimsessions"
 " directory. If it does, configure the vim-session plug-in to load

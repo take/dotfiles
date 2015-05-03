@@ -9,10 +9,10 @@ let g:my.ft = {
 set nocompatible
 
 if has('vim_starting')
-  set runtimepath+=~/Dropbox/Projects/dotfiles/.vim/bundle/neobundle.vim/
+  set runtimepath+=~/projects/dotfiles/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/Dropbox/Projects/dotfiles/.vim/bundle/'))
+call neobundle#begin(expand('~/projects/dotfiles/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
 
@@ -220,8 +220,7 @@ NeoBundleLazy 'Blackrush/vim-gocode', {
                 \ 'autoload': { 'filetypes': 'go' }
               \ }
 
-" Plugin reading finish
-filetype plugin indent on
+call neobundle#end()
 
 " Installation check
 NeoBundleCheck
