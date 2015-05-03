@@ -133,9 +133,6 @@ NeoBundleLazy 'AndrewRadev/switch.vim', {
               \ }
 
 " html
-NeoBundleLazy 'mattn/zencoding-vim', {
-                \ 'autoload' : { 'filetypes' : g:my.ft.html_files }
-              \ }
 NeoBundleLazy 'othree/html5.vim', {
                 \ 'autoload' : { 'filetypes' : g:my.ft.html_files}
               \ }
