@@ -27,12 +27,14 @@ export EDITOR
 export LANG=ja_JP.UTF-8
 export LESSCHARSET=UTF-8
 
-alias cdd='cd ~/projects/dotfiles'
+alias cdp='cd ~/projects'
 alias vi='vim'
 alias viz='vim ~/.zshrc'
 alias viv='vim ~/.vimrc'
 alias be='bundle exec'
 alias gha='github'
+
+cdp
 
 # alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
 
