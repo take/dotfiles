@@ -34,8 +34,6 @@ alias viv='vim ~/.vimrc'
 alias be='bundle exec'
 alias gha='github'
 
-cdp
-
 # alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
 
 # tmuxintor
