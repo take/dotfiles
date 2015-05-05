@@ -34,7 +34,7 @@ alias viv='vim ~/.vimrc'
 alias be='bundle exec'
 alias gha='github'
 
-# alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
+alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
 
 # tmuxintor
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
