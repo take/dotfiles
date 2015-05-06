@@ -91,6 +91,7 @@ NeoBundleLazy 'Shougo/neocomplete.vim', {
                 \ 'autoload' : { 'insert' : 1 }
               \ }
 NeoBundleLazy 'Shougo/neosnippet', {
+                \ 'depends' : 'Shougo/neosnippet-snippets',
                 \ 'autoload' : {
                   \ 'insert'   : 1,
                   \ 'commands' : 'NeoSnippetEdit'
