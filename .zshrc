@@ -19,7 +19,7 @@ setopt auto_cd
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 GOPATH=$HOME/go
-PATH=$HOME/.rbenv/shims:$HOME/bin:$PATH:$GOPATH/bin
+PATH=$HOME/.nodebrew/current/bin:$HOME/.rbenv/shims:$HOME/bin:$PATH:$GOPATH/bin
 EDITOR=vim
 export GOPATH
 export PATH
