@@ -248,6 +248,7 @@ nmap <silent><c-g><c-h> :OpenGithubFile<cr>
 let bundle = NeoBundleGet('open-browser-github.vim')
 function! bundle.hooks.on_source(bundle)
   let g:openbrowser_github_always_used_branch = 'master'
+  let g:openbrowser_github_url_exists_check = 'ignore'
 endfunction
 
 
