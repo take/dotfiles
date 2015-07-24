@@ -192,6 +192,8 @@ let g:airline_right_sep = ''
 "-------------
 " Disable AutoComplPop
 let g:acp_enableAtStartup = 0
+nmap <leader>cd :NeoCompleteDisable<cr>
+nmap <leader>ce :NeoCompleteEnable<cr>
 
 let bundle = NeoBundleGet('neocomplete.vim')
 function! bundle.hooks.on_source(bundle)
