@@ -260,6 +260,7 @@ endfunction
 "-----------
 " Show list in quickfix
 let g:syntastic_auto_loc_list = 1
+" let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 let g:syntastic_ruby_checkers = []
 " Skip when :wq, :x, :ZZ
 let g:syntastic_check_on_wq    = 0
