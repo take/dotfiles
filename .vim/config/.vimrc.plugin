@@ -171,8 +171,11 @@ NeoBundle 'gregsexton/gitv', {
           \ }
 
 " Display features
-NeoBundle 'bling/vim-airline', {
+NeoBundle 'vim-airline/vim-airline', {
             \ 'depends' : 'tpope/vim-fugitive'
+          \ }
+NeoBundle 'vim-airline/vim-airline-themes', {
+            \ 'depends' : 'vim-airline/vim-airline'
           \ }
 NeoBundleLazy 'Yggdroot/indentLine', {
                 \ 'autoload' : { 'commands' : 'IndentLinesToggle' }
