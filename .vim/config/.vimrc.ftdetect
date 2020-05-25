@@ -1,1 +1,2 @@
 au BufRead,BufNewFile *.pp set filetype=puppet
+au BufRead,BufNewFile *.tsx set filetype=typescript

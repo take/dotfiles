@@ -188,20 +188,9 @@ let g:airline_right_sep = ''
 
 
 "-------------
-" Neocomplete
+" Deoplete
 "-------------
-" Disable AutoComplPop
-let g:acp_enableAtStartup = 0
-nmap <leader>cd :NeoCompleteDisable<cr>
-nmap <leader>ce :NeoCompleteEnable<cr>
-
-let bundle = NeoBundleGet('neocomplete.vim')
-function! bundle.hooks.on_source(bundle)
-  " Use neocomplete
-  let g:neocomplete#enable_at_startup            = 1
-  let g:neocomplete#auto_completion_start_length = 3
-  let g:neocomplete#force_overwrite_completefunc = 1
-endfunction
+let g:deoplete#enable_at_startup = 1
 
 
 
@@ -210,7 +199,7 @@ endfunction
 "------------
 imap <c-f> <plug>(neosnippet_expand_or_jump)
 nmap <space>e <c-u>:NeoSnippetEdit<cr>
-au BufRead,BufNewFile *.snip  set filetype=snippet
+au BufRead,BufNewFile *.snip set filetype=snippet
 
 let bundle = NeoBundleGet('neosnippet')
 function! bundle.hooks.on_source(bundle)

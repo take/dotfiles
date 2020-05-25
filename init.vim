@@ -12,6 +12,7 @@ if dein#load_state('~/.cache/dein')
   call dein#add('Shougo/deoplete.nvim')
   call dein#add('Shougo/Denite.nvim')
   call dein#add('Shougo/neoyank.vim')
+  call dein#add('Shougo/neomru.vim')
   call dein#add('Shougo/defx.nvim')
   call dein#add('tpope/vim-dispatch')
   call dein#add('tyru/open-browser.vim')
@@ -71,15 +72,16 @@ set number relativenumber
 set backupdir=/private/tmp
 set dir=/private/tmp
 set backspace=indent,eol,start
-set wildignore+=**/node_modules/**
 set confirm
 set iskeyword+=-,_
 autocmd BufWritePre * :%s/\s\+$//ge " Deleting trailing whitespaces
-set guioptions= " Remove scroll bar from macvim
+set colorcolumn=80
 set updatetime=100
-" https://stackoverflow.com/a/37884871
-set timeoutlen=1000
-set ttimeoutlen=0
+" set timeoutlen=1000 " https://stackoverflow.com/a/37884871
+" set ttimeoutlen=0 " https://stackoverflow.com/a/37884871
+cnoreabbrev <expr> help ((getcmdtype() is# ':'    && getcmdline() is# 'help')?('vert help'):('help')) " https://www.reddit.com/r/vim/comments/2irn8j/vertical_split_by_default/cl4sx02/
+cnoreabbrev <expr> h ((getcmdtype() is# ':'    && getcmdline() is# 'h')?('vert help'):('h')) " https://www.reddit.com/r/vim/comments/2irn8j/vertical_split_by_default/cl4sx02/
+set splitright " https://www.reddit.com/r/vim/comments/2irn8j/vertical_split_by_default/cl4sx02/
 
 " Tabs
 nmap <Leader>t [TABCMD]
@@ -93,12 +95,6 @@ set autoindent
 " auto insert
 set smartindent
 set expandtab
-" how much does tab uses space when display
-set tabstop=4
-" how much spaces will be inserted when tab is pressed. saame as BS. if it's set to 0, it'll automatically be the same as tabstop
-set softtabstop=4
-" how much does it change when '>>' or '<<' is pressed
-set shiftwidth=4
 if has("autocmd")
   filetype plugin on
   filetype indent on
@@ -122,6 +118,7 @@ if has("autocmd")
   autocmd FileType java       setlocal sw=4 sts=4 ts=4 et
   autocmd FileType javascript setlocal sw=2 sts=2 ts=2 et
   autocmd FileType typescript setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType typescriptreact setlocal sw=2 sts=2 ts=2 et
   autocmd FileType json       setlocal sw=2 sts=2 ts=2 et
   autocmd FileType coffee     setlocal sw=2 sts=2 ts=2 et
   autocmd FileType perl       setlocal sw=4 sts=4 ts=4 et
@@ -184,7 +181,7 @@ function! s:defx_my_settings() abort
         \ defx#do_action('open_or_close_tree')
   nnoremap <silent><buffer><expr> K
         \ defx#do_action('new_directory')
-  nnoremap <silent><buffer><expr> N
+  nnoremap <silent><buffer><expr> <leader>N
         \ defx#do_action('new_file')
   nnoremap <silent><buffer><expr> M
         \ defx#do_action('new_multiple_files')
@@ -224,6 +221,7 @@ function! s:defx_my_settings() abort
 endfunction
 
 " Denite
+call denite#custom#option('_', 'statusline', v:false) " Disabling internal statusline
 autocmd FileType denite call s:denite_my_settings()
 function! s:denite_my_settings() abort
   nnoremap <silent><buffer><expr> <CR>
@@ -244,18 +242,34 @@ endfunction
 
 nmap <silent><c-p> :Denite file/rec<cr>
 nmap <silent><leader>b :Denite buffer<cr>
-nmap <silent><leader>f :Denite grep<cr>
+nmap <silent><leader>m :Denite file_mru<cr>
+nmap <silent><leader>f :Denite grep -post-action=open<cr>
 nmap <silent><leader>y :Denite neoyank<cr>
+nmap <silent><leader>o :Denite outline<cr>
 call denite#custom#option('_', 'max_dynamic_update_candidates', 200000)
 call denite#custom#option('_', 'start_filter', 'true')
-
 call denite#custom#var('file/rec', 'command', ['ag', '--follow', '--nogroup', '-g', ''])
-call denite#custom#var('grep', 'command', ['ag'])
-call denite#custom#var('grep', 'default_opts', ['-i', '--vimgrep'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', [])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
+call denite#custom#var('grep', {
+      \ 'command': ['ag'],
+      \ 'default_opts': [],
+      \ 'recursive_opts': [],
+      \ 'pattern_opt': [],
+      \ 'final_opts': [],
+      \ })
+call denite#custom#source('grep', 'args', ['', '', '!']) " intereactive mode
+call denite#custom#source('grep', 'converters', ['converter/abbr_word']) " narrow by path in grep source.
+
+" grep selected text ref: https://qiita.com/aratana_tamutomo/items/e36fb724c604bdd19756
+function! g:GetVisualWord() abort
+  let word = getline("'<")[getpos("'<")[2] - 1:getpos("'>")[2] - 1]
+  return word
+endfunction
+function! g:GetVisualWordEscape() abort
+  let word = substitute(GetVisualWord(), '\\', '\\\\', 'g')
+  let word = substitute(word, '[.?*+^$|()[\]]', '\\\0', 'g')
+  return word
+endfunction
+xnoremap <silent><leader>f :Denite grep:::`GetVisualWordEscape()` -post-action=open<cr>
 
 " Deoplete
 let g:deoplete#enable_at_startup = 1
@@ -287,4 +301,8 @@ map <leader>ra :call RunAllSpecs()<CR>
 
 " Neomake
 call neomake#configure#automake('nrwi', 500)
-let g:neomake_open_list = 2
+" let g:neomake_open_list = 2
+let g:neomake_typescript_lint_maker = {
+      \ 'exe': 'tsc',
+      \ 'args': ['--skipLibCheck'],
+      \ }

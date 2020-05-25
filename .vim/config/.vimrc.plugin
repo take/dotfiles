@@ -86,10 +86,14 @@ NeoBundleLazy 'alpaca-tc/alpaca_tags', {
                 \ }
               \ }
 
-" Completion
-NeoBundleLazy 'Shougo/neocomplete.vim', {
-                \ 'autoload' : { 'insert' : 1 }
+NeoBundleLazy 'leafgarland/typescript-vim', {
+                \ 'autoload' : { 'filetypes' : ['typescript'] }
               \ }
+
+" Completion
+NeoBundle 'roxma/nvim-yarp'
+NeoBundle 'roxma/vim-hug-neovim-rpc'
+NeoBundle 'Shougo/deoplete.nvim'
 NeoBundleLazy 'Shougo/neosnippet', {
                 \ 'depends' : 'Shougo/neosnippet-snippets',
                 \ 'autoload' : {

@@ -19,22 +19,23 @@ setopt auto_cd
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 GOPATH=$HOME/go
-PATH=$HOME/.nodebrew/current/bin:$HOME/.rbenv/shims:$HOME/bin:$PATH:$GOPATH/bin
-EDITOR=vim
+PATH=$HOME/.nodenv/shims:$HOME/.rbenv/shims:$HOME/bin:$GOPATH/bin:$PATH
+EDITOR=nvim
 export GOPATH
 export PATH
 export EDITOR
-export LANG=ja_JP.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 export LESSCHARSET=UTF-8
 
 alias cdp='cd ~/projects'
-alias vi='vim'
-alias viz='vim ~/.zshrc'
-alias viv='vim ~/.vimrc'
+alias vi='nvim'
+alias viz='vi ~/.zshrc'
+alias viv='vi ~/.config/nvim/init.vim'
 alias be='bundle exec'
 alias gha='github'
 
-alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
+# alias rm='gmv -f --backup=numbered --target-directory ~/.Trash/'
 
 # tmuxintor
 [[ -s $HOME/.tmuxinator/scripts/tmuxinator ]] && source $HOME/.tmuxinator/scripts/tmuxinator
@@ -83,3 +84,6 @@ compdef _mux mux
 bindkey -e
 
 eval "$(direnv hook zsh)"
+eval "$(nodenv init -)"
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"

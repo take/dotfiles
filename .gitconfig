@@ -1,6 +1,7 @@
 [user]
 	name = Takehiro Adachi
 	email = takehiro0740@gmail.com
+	signingkey = F5B25BE0657260DD
 [color]
 	ui = 1
 [rebase]
