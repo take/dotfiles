@@ -142,134 +142,13 @@ abbr        class end
     class ${1}
     end
 
-snippet am
-    alias_method :${1:new_name}, :${2:old_name}
-
-snippet array
-    Array.new(${1:10}) { |${2:i}| ${3} }
-
-snippet hash
-    Hash.new { |${1:hash}, ${2:key}| $1[$2] = ${3} }
-
-snippet dir
-    Filename.dirname(__FILE__)
-
 snippet defs
     def self.${1}
     end
 
 snippet r
     attr_reader :${1:attr_names}
-# attr_writer
 snippet w
     attr_writer :${1:attr_names}
-# attr_accessor
 snippet rw
     attr_accessor :${1:attr_names}
-# include Enumerable
-
-snippet     begin
-abbr        begin rescue end
-    begin
-      ${1}
-    rescue => e
-      ${2}
-    end
-
-snippet     begine
-abbr        begin rescue end
-    begin
-      ${1}
-    rescue => e
-      ${2}
-    ensure
-      ${3}
-    end
-
-snippet     each
-abbr        each do
-    each do |${1}|
-    end
-
-snippet     while
-abbr        while end
-    while ${1} do
-      ${2}
-    end
-
-snippet     utf
-abbr        utf-8 magick
-prev_word    '^'
-    # coding: utf-8
-
-snippet     #!
-abbr        #!/usr/local/bin/ruby
-prev_word   '^'
-    #!/usr/local/bin/ruby
-
-snippet     =b
-abbr        =begin rdoc ...  =end
-prev_word   '^'
-    =begin rdoc
-        ${1}
-    =end
-
-snippet     y
-abbr        yields
-prev_word  '^'
-    :yields: ${1:arguments}
-
-snippet req
-    require '${1}'
-
-snippet end
-    __END__
-snippet case
-    case ${1:object}
-    when ${2:condition}
-        ${3}
-    end
-snippet when
-    when ${1:condition}
-
-snippet nam
-    namespace :${1:name} do
-        ${2}
-    end
-
-snippet     watcher
-prev_word        '^'
-    require 'digest/md5'
-    def calc_md5(filename)
-      Digest::MD5.hexdigest(File.open(filename, 'rb').read)
-    end
-
-    def main
-      @md5 = {}
-      Dir.glob("app/**/*.rb").each  { |f| @md5[f] = calc_md5(f) }
-      Dir.glob("spec/**/*.rb").each { |f| @md5[f] = calc_md5(f) }
-    end
-
-    main
-
-    watch('app/(.*)\.rb') {|code|
-      if @md5[code[0]] == calc_md5(code[0])
-        puts "Saved: #{code[0]}"
-      else
-        puts "Saved & Changed: #{code[0]}"
-        system "bundle exec rspec spec/#{code[1]}_spec.rb"
-        @md5[code[0]] = calc_md5(code[0])
-      end
-    }
-    watch('spec/(.*)_spec\.rb') {|code|
-      if @md5[code[0]] == calc_md5(code[0])
-        puts "Saved: #{code[0]}"
-      else
-        puts "Saved & Changed: #{code[0]}"
-        system "bundle exec rspec #{code[0]}"
-        @md5[code[0]] = calc_md5(code[0])
-      end
-    }
-
-snippet     404
-    match "*path" => 'error#handle404'
