@@ -75,7 +75,9 @@ set backspace=indent,eol,start
 set confirm
 set iskeyword+=-,_
 autocmd BufWritePre * :%s/\s\+$//ge " Deleting trailing whitespaces
-set colorcolumn=80
+" https://youtu.be/aHm36-na4-4?t=238
+highlight ColorColumn ctermbg=magenta
+call matchadd('ColorColumn', '\%81v', 100)
 set updatetime=100
 " set timeoutlen=1000 " https://stackoverflow.com/a/37884871
 " set ttimeoutlen=0 " https://stackoverflow.com/a/37884871
@@ -248,7 +250,7 @@ nmap <silent><leader>y :Denite neoyank<cr>
 nmap <silent><leader>o :Denite outline<cr>
 call denite#custom#option('_', 'max_dynamic_update_candidates', 200000)
 call denite#custom#option('_', 'start_filter', 'true')
-call denite#custom#var('file/rec', 'command', ['ag', '--follow', '--nogroup', '-g', ''])
+call denite#custom#var('file/rec', 'command', ['ag', '--hidden', '--follow', '--nogroup', '-g', ''])
 call denite#custom#var('grep', {
       \ 'command': ['ag'],
       \ 'default_opts': [],
@@ -273,12 +275,29 @@ xnoremap <silent><leader>f :Denite grep:::`GetVisualWordEscape()` -post-action=o
 
 " Deoplete
 let g:deoplete#enable_at_startup = 1
-let g:LanguageClient_serverCommands = {
-      \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
-      \}
 call deoplete#custom#var('omni', 'input_patterns', {
       \ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],
       \})
+
+" LanguageClient-neovim
+let g:LanguageClient_loggingLevel = 'INFO'
+let g:LanguageClient_loggingFile = '~/Desktop/lc.log'
+nmap <silent><leader>l :Denite documentSymbol<cr>
+nmap <silent>K :call LanguageClient#textDocument_hover()<cr>
+nmap <silent>gd :call LanguageClient#textDocument_definition()<cr>
+nmap <silent><F2> :call LanguageClient#textDocument_rename()<CR>
+let g:LanguageClient_diagnosticsEnable = 0
+let g:LanguageClient_serverCommands = {
+      \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+      \ 'typescript': ['typescript-language-server', '--stdio'],
+      \ 'typescriptreact': ['typescript-language-server', '--stdio'],
+      \}
+      " \ 'typescript': ['javascript-typescript-stdio'],
+      " \ 'typescriptreact': ['javascript-typescript-stdio'],
+let g:LanguageClient_rootMarkers = {
+      \ 'typescript': ['tsconfig.json'],
+      \ 'typescriptreact': ['tsconfig.json'],
+      \ }
 
 " NeoSnippet
 imap <c-f> <Plug>(neosnippet_expand_or_jump)
@@ -289,8 +308,7 @@ nmap gx <plug>(openbrowser-smart-search)
 vmap gx <plug>(openbrowser-smart-search)
 
 " airline
-" TODO: Try it out
-" let g:airline#extensions#languageclient#enabled = 1
+let g:airline#extensions#languageclient#enabled = 1
 
 " RSpec
 let g:rspec_command = "Dispatch bundle exec rspec {spec}"
@@ -301,8 +319,4 @@ map <leader>ra :call RunAllSpecs()<CR>
 
 " Neomake
 call neomake#configure#automake('nrwi', 500)
-" let g:neomake_open_list = 2
-let g:neomake_typescript_lint_maker = {
-      \ 'exe': 'tsc',
-      \ 'args': ['--skipLibCheck'],
-      \ }
+let g:neomake_open_list = 2
