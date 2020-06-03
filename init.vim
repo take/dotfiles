@@ -10,16 +10,14 @@ if dein#load_state('~/.cache/dein')
   " Basics
   call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
   call dein#add('Shougo/deoplete.nvim')
+  call dein#add('neovim/nvim-lsp')
+  call dein#add('Shougo/deoplete-lsp')
   call dein#add('Shougo/Denite.nvim')
   call dein#add('Shougo/neoyank.vim')
   call dein#add('Shougo/neomru.vim')
   call dein#add('Shougo/defx.nvim')
   call dein#add('tpope/vim-dispatch')
   call dein#add('tyru/open-browser.vim')
-  call dein#add('autozimu/LanguageClient-neovim', {
-        \ 'rev': 'next',
-        \ 'build': 'bash install.sh',
-        \ })
 
   if !has('nvim')
     call dein#add('roxma/nvim-yarp')
@@ -279,36 +277,22 @@ call deoplete#custom#var('omni', 'input_patterns', {
       \ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],
       \})
 
-" LanguageClient-neovim
-let g:LanguageClient_loggingLevel = 'INFO'
-let g:LanguageClient_loggingFile = '~/Desktop/lc.log'
-nmap <silent><leader>l :Denite documentSymbol<cr>
-nmap <silent>K :call LanguageClient#textDocument_hover()<cr>
-nmap <silent>gd :call LanguageClient#textDocument_definition()<cr>
-nmap <silent><F2> :call LanguageClient#textDocument_rename()<CR>
-let g:LanguageClient_diagnosticsEnable = 0
-let g:LanguageClient_serverCommands = {
-      \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
-      \ 'typescript': ['typescript-language-server', '--stdio'],
-      \ 'typescriptreact': ['typescript-language-server', '--stdio'],
-      \}
-      " \ 'typescript': ['javascript-typescript-stdio'],
-      " \ 'typescriptreact': ['javascript-typescript-stdio'],
-let g:LanguageClient_rootMarkers = {
-      \ 'typescript': ['tsconfig.json'],
-      \ 'typescriptreact': ['tsconfig.json'],
-      \ }
+" nvim-lsp
+:lua << END
+  require'nvim_lsp'.tsserver.setup{}
+  require'nvim_lsp'.solargraph.setup{}
+END
+nnoremap <silent>gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent><c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent>K     <cmd>lua vim.lsp.buf.hover()<CR>
 
-" NeoSnippet
+"NeoSnippet
 imap <c-f> <Plug>(neosnippet_expand_or_jump)
 let g:neosnippet#snippets_directory='~/projects/dotfiles/.vim/snippet/'
 
 " OpenBroser
 nmap gx <plug>(openbrowser-smart-search)
 vmap gx <plug>(openbrowser-smart-search)
-
-" airline
-let g:airline#extensions#languageclient#enabled = 1
 
 " RSpec
 let g:rspec_command = "Dispatch bundle exec rspec {spec}"
